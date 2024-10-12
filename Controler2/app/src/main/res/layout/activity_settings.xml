@@ -9,7 +9,6 @@
     <!-- activity_settings.xml -->
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,44 +19,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Configurar App"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/editTextProfileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome do Perfil" />
 
         <EditText
             android:id="@+id/editTextMac"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Endereço MAC"
-            android:inputType="textVisiblePassword"
-            android:digits="ABCDEFabcdef0123456789:-"
-            android:maxLength="17"/>
+            android:hint="Endereço MAC" />
 
         <EditText
             android:id="@+id/editTextIp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Endereço IP"
-            android:inputType="text"/>
+            android:hint="Endereço IP" />
 
         <EditText
             android:id="@+id/editTextPort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Porta"
-            android:inputType="number"/>
+            android:hint="Porta" />
 
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save" />
+            android:text="Salvar" />
 
         <Button
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Voltar"/>
+            android:text="Voltar" />
+
+        <ListView
+            android:id="@+id/listViewProfiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

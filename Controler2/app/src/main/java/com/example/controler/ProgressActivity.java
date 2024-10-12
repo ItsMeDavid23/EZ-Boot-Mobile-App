@@ -8,9 +8,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -48,7 +54,49 @@ public class ProgressActivity extends AppCompatActivity {
         ordem = getIntent().getStringExtra("ordem");
 
         progressBar.setProgress(progressStatus);
-        new WakeOnLanTask().execute(macAddress, ordem, serverIp, serverPort);
+
+        // Perguntar ao usuário se será necessário efetuar login
+        perguntarSeNecessarioLogin(macAddress, serverIp, serverPort);
+    }
+
+    private void perguntarSeNecessarioLogin(String macAddress, String serverIp, String serverPort) {
+        new AlertDialog.Builder(this)
+                .setTitle("Login Necessário")
+                .setMessage("Vai ser necessário efetuar login?")
+                .setPositiveButton("Sim", (dialog, which) -> exibirCamposLogin(macAddress, serverIp, serverPort))
+                .setNegativeButton("Não", (dialog, which) -> {
+                    ordem += ",0,0,0,0";
+                    Log.e(TAG, "Ordem: " + ordem);
+                    new WakeOnLanTask().execute(macAddress, ordem, serverIp, serverPort);
+                })
+                .setNeutralButton("Cancelar", (dialog, which) -> finish())
+                .setCancelable(false)
+                .show();
+    }
+
+    private void exibirCamposLogin(String macAddress, String serverIp, String serverPort) {
+        // Crie um layout para os campos de entrada
+        View loginView = LayoutInflater.from(this).inflate(R.layout.dialog_login, null);
+        EditText editTextUsername = loginView.findViewById(R.id.editTextUsername);
+        EditText editTextPassword = loginView.findViewById(R.id.editTextPassword);
+        CheckBox checkBoxSignedIn = loginView.findViewById(R.id.checkBoxSignedIn);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Efetuar Login")
+                .setView(loginView)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    String username = editTextUsername.getText().toString();
+                    String password = editTextPassword.getText().toString();
+                    boolean keepSignedIn = checkBoxSignedIn.isChecked();
+                    ordem += ",1," + username + "," + password + "," + (keepSignedIn ? "1" : "0");
+                    Log.e(TAG, "Ordem: " + ordem);
+                    new WakeOnLanTask().execute(macAddress, ordem, serverIp, serverPort);
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> {
+                    finish();
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private class WakeOnLanTask extends AsyncTask<String, String, String> {
@@ -132,8 +180,6 @@ public class ProgressActivity extends AppCompatActivity {
                      DataOutputStream dos = new DataOutputStream(serverSocket.getOutputStream());
                      BufferedReader br = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()))) {
                     //faz um log da ordem que vai ser enviada
-                    ordem += ",1,Username,Password,1";
-
                     Log.d(TAG, "Ordem a ser enviada: " + ordem);
                     dos.writeUTF(ordem);
 
@@ -148,7 +194,7 @@ public class ProgressActivity extends AppCompatActivity {
                         // Lê a segunda resposta do servidor
                         String segundaResposta = br.readLine();
                         System.out.println("Segunda resposta do servidor :"+segundaResposta);
-                        
+
                         if ("Order completed successfully".equals(segundaResposta)) {
                             progressStatus = 100;
                             publishProgress("Ordem completada com sucesso!");

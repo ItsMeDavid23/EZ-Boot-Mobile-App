@@ -37,44 +37,22 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
         Set<String> selectedButtons = preferences.getStringSet("selected_buttons", new HashSet<>());
 
         for (String buttonName : selectedButtons) {
-            // Crie um novo botão
-            Button button = new Button(this);
-            button.setText(buttonName);
-
-            // Defina um OnClickListener para o botão
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Adicione a ação que deve ser executada quando o botão é clicado
-                }
-            });
-
-            // Adicione o botão ao layout
-            layoutBotoesDinamicos.addView(button);
+            adicionarBotaoDinamico(buttonName, null);
         }
         // Recuperar os botões adicionados anteriormente
         recuperarBotoesSalvos();
-
 
         // Botão de configurações e adicionar botão
         Button settingsButton = findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> openSettings());
         Button btnAdicionar = findViewById(R.id.btnAdd);
         Button btnSelection = findViewById(R.id.btnSelection);
-        btnSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Inicie a atividade SelecionarBotoesActivity
-                Intent intent = new Intent(MainActivity.this, SelecionarBotoesActivity.class);
-                startActivity(intent);
-            }
+        btnSelection.setOnClickListener(v -> {
+            // Inicie a atividade SelecionarBotoesActivity
+            Intent intent = new Intent(MainActivity.this, SelecionarBotoesActivity.class);
+            startActivity(intent);
         });
-        btnAdicionar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                abrirPaginaAdicaoBotao();
-            }
-        });
+        btnAdicionar.setOnClickListener(v -> abrirPaginaAdicaoBotao());
     }
 
     @Override
@@ -89,38 +67,31 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
         Button novoBotao = new Button(this);
         novoBotao.setText(texto);
         novoBotao.setTag(acao);
-        novoBotao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Adicione um log ao clicar no botão
-                Log.d(TAG, "Botão clicado: " + texto);
+        novoBotao.setOnClickListener(v -> {
+            // Adicione um log ao clicar no botão
+            Log.d(TAG, "Botão clicado: " + texto);
+            Log.d(TAG, "NIGGER"+ texto);
 
-                // Logic for dynamic button action
-                executarAcao(acao, "Mensagem do botão dinâmico");
-            }
+            // Logic for dynamic button action
+            executarAcao(acao, "Mensagem do botão dinâmico");
         });
 
-        novoBotao.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                // Cria um AlertDialog perguntando se o usuário deseja excluir o botão
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Excluir botão")
-                        .setMessage("Deseja eliminar este botão?")
-                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Se o usuário clicar em "Sim", remova o botão do layout
-                                layoutBotoesDinamicos.removeView(novoBotao);
-                                // Atualize as preferências compartilhadas
-                                salvarBotoes();
-                            }
-                        })
-                        .setNegativeButton("Não", null)
-                        .show();
+        novoBotao.setOnLongClickListener(v -> {
+            // Cria um AlertDialog perguntando se o usuário deseja excluir o botão
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Excluir botão")
+                    .setMessage("Deseja eliminar este botão?")
+                    .setPositiveButton("Sim", (dialog, which) -> {
+                        // Se o usuário clicar em "Sim", remova o botão do layout
+                        layoutBotoesDinamicos.removeView(novoBotao);
+                        // Atualize as preferências compartilhadas
+                        salvarBotoes();
+                    })
+                    .setNegativeButton("Não", null)
+                    .show();
 
-                // Retorna true para indicar que o evento de clique longo foi consumido
-                return true;
-            }
+            // Retorna true para indicar que o evento de clique longo foi consumido
+            return true;
         });
 
         // Set layout properties for the new button
@@ -145,34 +116,14 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
     @Override
     protected void onPause() {
         super.onPause();
-
-        // Save the selected buttons when the activity is about to be paused
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        Set<String> selectedButtons = new HashSet<>();
-        int totalButtons = layoutBotoesDinamicos.getChildCount();
-        for (int i = 0; i < totalButtons; i++) {
-            Button button = (Button) layoutBotoesDinamicos.getChildAt(i);
-            String buttonText = button.getText().toString();
-            selectedButtons.add(buttonText);
-        }
-
-        editor.putStringSet("selected_buttons", selectedButtons);
-        editor.apply();
+        salvarBotoes();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Atualizar os valores das configurações ao retomar a main activity (mac, ip, porta)
         atualizarValores();
-
-        // Limpar todos os botões existentes
         layoutBotoesDinamicos.removeAllViews();
-
-        // Recuperar os botões Selecionados no 'SelecionarBotoesActivity'
         mostrarBotoesSelecionados();
     }
 
@@ -182,37 +133,75 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
     }
 
     private void executarAcao(String ordem, String mensagemToast) {
+        String perfilAtivo = obterPerfilAtivo();
+        Log.d(TAG,"perfil ativo:"+ perfilAtivo);
+        if (perfilAtivo != null) {
+            String[] configValues = obterValoresConfiguracao(perfilAtivo);
+            for (int i = 0; i < configValues.length; i++) {
+                Log.d(TAG, "configValues[" + i + "]: " + configValues[i]);
+            }
 
-        // Obter valores das configurações
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String macAddress = preferences.getString("mac_address", "");
-        String serverIp = preferences.getString("ip_address", "");
-        String serverPort = preferences.getString("port", "");
+            String macAddress = configValues[0];
+            String serverIp = configValues[1];
+            String serverPort = configValues[2];
 
-        // Validar se os valores foram preenchidos nas configurações
-        if (macAddress.isEmpty() || serverIp.isEmpty() || serverPort.isEmpty()) {
-            Toast.makeText(this, "Configure o MAC, IP e Porta nas configurações", Toast.LENGTH_SHORT).show();
-            return;
+            Log.d(TAG, "Valores - MAC: " + macAddress + ", IP: " + serverIp + ", Porta: " + serverPort);
+
+
+            if (macAddress.isEmpty() || serverIp.isEmpty() || serverPort.isEmpty()) {
+                Toast.makeText(this, "Configure o MAC, IP e Porta nas configurações", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Toast.makeText(this, mensagemToast, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ProgressActivity.class);
+            intent.putExtra("macAddress", macAddress);
+            intent.putExtra("serverIp", serverIp);
+            intent.putExtra("serverPort", serverPort);
+            intent.putExtra("ordem", ordem);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Nenhum perfil ativo encontrado.", Toast.LENGTH_SHORT).show();
         }
-
-        Toast.makeText(this, mensagemToast, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, ProgressActivity.class);
-        intent.putExtra("macAddress", macAddress);
-        intent.putExtra("serverIp", serverIp);
-        intent.putExtra("serverPort", serverPort);
-        intent.putExtra("ordem", ordem);
-        startActivity(intent);
     }
 
     private void atualizarValores() {
-        // Obter valores das configurações
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String macAddress = preferences.getString("mac_address", "");
-        String serverIp = preferences.getString("ip_address", "");
-        String serverPort = preferences.getString("port", "");
+        String perfilAtivo = obterPerfilAtivo();
+        if (perfilAtivo != null) {
+            String[] configValues = obterValoresConfiguracao(perfilAtivo);
+            Log.d(TAG, "Valores atualizados - MAC: " + configValues[0] + ", IP: " + configValues[1] + ", Porta: " + configValues[2]);
+        } else {
+            Log.d(TAG, "Nenhum perfil ativo encontrado.");
+        }
+    }
 
-        // Use os valores atualizados conforme necessário
-        Log.d(TAG, "Valores atualizados - MAC: " + macAddress + ", IP: " + serverIp + ", Porta: " + serverPort);
+    private String obterPerfilAtivo() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString("perfil_ativo", null);
+    }
+
+    private String[] obterValoresConfiguracao(String perfil) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String profileData = preferences.getString("profile_" + perfil, "");
+        preferences.getString(perfil + "_mac_address", "");
+        preferences.getString(perfil + "_ip_address", "");
+        preferences.getString(perfil + "_port", "");
+
+        String macAddress = null;
+        String serverIp = null;
+        String serverPort = null;
+
+        if (!profileData.isEmpty()) {
+            String[] parts = profileData.split("\\|\\|\\|");
+            if (parts.length == 3) {
+                macAddress = parts[0];
+                serverIp = parts[1];
+                serverPort = parts[2];
+
+                Toast.makeText(this, "Perfil " + perfil + " carregado", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return new String[]{macAddress, serverIp, serverPort};
     }
 
     private void abrirPaginaAdicaoBotao() {
@@ -223,66 +212,23 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                // Obtenha dados extras da intent
-                String textoBotao = data.getStringExtra("texto");
-                String acaoBotao = data.getStringExtra("acao");
-
-                // Adicione o botão dinamicamente
-                adicionarBotaoDinamico(textoBotao, acaoBotao);
-
-                // Salvar os botões após adicionar um novo
-                salvarBotoes();
-            }
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String textoBotao = data.getStringExtra("texto");
+            String acaoBotao = data.getStringExtra("acao");
+            adicionarBotaoDinamico(textoBotao, acaoBotao);
+            salvarBotoes();
         }
     }
 
-    private  void mostrarBotoesSelecionados() {
-        // Recuperar e exibir os botões selecionados
+    private void mostrarBotoesSelecionados() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> selectedButtons = preferences.getStringSet("selected_buttons", new HashSet<>());
 
         Log.d(TAG, "Botões selecionados: " + selectedButtons);
 
-        // Verificar se selectedButtons está vazio
         if (!selectedButtons.isEmpty()) {
             for (String buttonName : selectedButtons) {
-                // Crie um novo botão
-                Button button = new Button(this);
-                button.setText(buttonName);
-
-                // Defina um OnClickListener para o botão
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // Adicione um log ao clicar no botão
-                        Log.d(TAG, "Botão clicado: " + buttonName);
-
-                        // Obter valores das configurações
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        String macAddress = preferences.getString("mac_address", "");
-                        String serverIp = preferences.getString("ip_address", "");
-                        String serverPort = preferences.getString("port", "");
-
-                        // Validar se os valores foram preenchidos nas configurações
-                        if (macAddress.isEmpty() || serverIp.isEmpty() || serverPort.isEmpty()) {
-                            Toast.makeText(MainActivity.this, "Configure o MAC, IP e Porta nas configurações", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        // Iniciar a ProgressActivity
-                        Intent intent = new Intent(MainActivity.this, ProgressActivity.class);
-                        intent.putExtra("macAddress", macAddress);
-                        intent.putExtra("serverIp", serverIp);
-                        intent.putExtra("serverPort", serverPort);
-                        intent.putExtra("ordem", buttonName);
-                        startActivity(intent);
-                    }
-                });
-
-                // Adicione o botão ao layout
-                layoutBotoesDinamicos.addView(button);
+                adicionarBotaoDinamico(buttonName, buttonName);
             }
         } else {
             Log.d(TAG, "Nenhum botão selecionado.");
@@ -290,9 +236,8 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
     }
 
     private void salvarBotoes() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE); // Preferências compartilhadas privadas
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-
         editor.clear();
 
         int totalBotoes = layoutBotoesDinamicos.getChildCount();
@@ -306,13 +251,11 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
             botoes.add(textoBotao + "|||" + acaoBotao);
         }
         editor.putStringSet("botoes", botoes);
-
         editor.apply();
     }
 
     private void recuperarBotoesSalvos() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
         Set<String> botoes = prefs.getStringSet("botoes", new HashSet<>());
 
         for (String botao : botoes) {
@@ -323,19 +266,7 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
             }
             String textoBotao = partes[0];
             String acaoBotao = partes[1];
-            Button novoBotao = adicionarBotaoDinamico(textoBotao, acaoBotao);
-
-            // Defina um OnClickListener para o botão
-            novoBotao.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Adicione um log ao clicar no botão
-                    Log.d(TAG, "Botão clicado: " + textoBotao);
-
-                    // Adicione a ação que deve ser executada quando o botão é clicado
-                    executarAcao(acaoBotao, "Mensagem do botão dinâmico");
-                }
-            });
+            adicionarBotaoDinamico(textoBotao, acaoBotao);
         }
 
         Log.d(TAG, "Número de botões recuperados: " + layoutBotoesDinamicos.getChildCount());
@@ -344,9 +275,6 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
     @Override
     protected void onStop() {
         super.onStop();
-        // Salvar os botões quando a atividade estiver prestes a ser parada
         salvarBotoes();
     }
 }
-
-
