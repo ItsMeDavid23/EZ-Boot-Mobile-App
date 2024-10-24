@@ -1,5 +1,6 @@
 package com.example.controler;
 
+import android.widget.ImageButton;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,6 +81,18 @@ public class ProgressActivity extends AppCompatActivity {
         EditText editTextUsername = loginView.findViewById(R.id.editTextUsername);
         EditText editTextPassword = loginView.findViewById(R.id.editTextPassword);
         CheckBox checkBoxSignedIn = loginView.findViewById(R.id.checkBoxSignedIn);
+        ImageButton buttonTogglePassword = loginView.findViewById(R.id.buttonTogglePassword);
+
+        // Adicionar lógica para alternar a visibilidade da senha
+        buttonTogglePassword.setOnClickListener(v -> {
+            if (editTextPassword.getInputType() == (android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+            // Move o cursor para o final do texto
+            editTextPassword.setSelection(editTextPassword.getText().length());
+        });
 
         new AlertDialog.Builder(this)
                 .setTitle("Efetuar Login")

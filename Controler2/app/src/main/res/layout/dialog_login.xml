@@ -12,12 +12,27 @@
         android:hint="Username"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/editTextPassword"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <ImageButton
+            android:id="@+id/buttonTogglePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_view"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Toggle Password Visibility" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/checkBoxSignedIn"
