@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
         novoBotao.setTag(acao);
         novoBotao.setOnClickListener(v -> {
             // Adicione um log ao clicar no botão
-            Log.d(TAG, "Botão clicado: " + texto);
-            Log.d(TAG, "NIGGER"+ texto);
+            Log.d(TAG, "Nome Botão clicado: " + texto);
+            Log.d(TAG, "Ação Botão clicado: " + acao);
 
             // Logic for dynamic button action
             executarAcao(acao, "Mensagem do botão dinâmico");
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
 
         // Set layout properties for the new button
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,  // Change this line
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams.WRAP_CONTENT,  // Change this line
+        LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;  // Add this line
         int margin = getResources().getDimensionPixelSize(R.dimen.default_margin); // replace 'default_margin' with the desired margin value
         layoutParams.setMargins(margin, margin, margin, margin);
@@ -106,9 +106,6 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
 
         // Add the new button to layoutBotoes
         layoutBotoesDinamicos.addView(novoBotao);
-
-        // Log the number of buttons in layoutBotoes
-        Log.d(TAG, "Número de botões em layoutBotoes: " + layoutBotoesDinamicos.getChildCount());
 
         // Return the new button
         return novoBotao;
@@ -267,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
             }
             String textoBotao = partes[0];
             String acaoBotao = partes[1];
+            Log.d(TAG, "Recuperando botão: " + textoBotao + " com ação: " + acaoBotao + "!!!!!!!");
             adicionarBotaoDinamico(textoBotao, acaoBotao);
         }
 

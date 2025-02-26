@@ -70,6 +70,12 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
         editor.remove("botao_" + botao.getTexto());
         editor.apply();
 
+        // Remove the button from the saved buttons set
+        Set<String> botoes = preferences.getStringSet("botoes", new HashSet<>());
+        botoes.remove(botao.getTexto() + "|||" + botao.getAcao());
+        editor.putStringSet("botoes", botoes);
+        editor.apply();
+
         // Remove the button from the selected buttons set if it is selected
         Set<String> selectedButtons = new HashSet<>(preferences.getStringSet("selected_buttons", new HashSet<>()));
         selectedButtons.remove(botao.getTexto());
@@ -79,8 +85,8 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
         Log.d(TAG, "onBotaoDeleted: Botão removido de SharedPreferences e botões selecionados atualizados - " + selectedButtons);
 
         // Update the RecyclerView
-        List<Botao> botoes = getBotoes();
-        botaoAdapter.updateBotoes(botoes);
+        List<Botao> botoesAtualizados = getBotoes();
+        botaoAdapter.updateBotoes(botoesAtualizados);
     }
 
     private List<Botao> getBotoes() {
