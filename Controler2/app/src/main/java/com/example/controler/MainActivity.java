@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
 
         if (!selectedButtons.isEmpty()) {
             for (String buttonName : selectedButtons) {
-                adicionarBotaoDinamico(buttonName, buttonName);
+                String acaoBotao = preferences.getString("botao_" + buttonName, null);
+                adicionarBotaoDinamico(buttonName, acaoBotao);
             }
         } else {
             Log.d(TAG, "Nenhum botão selecionado.");
