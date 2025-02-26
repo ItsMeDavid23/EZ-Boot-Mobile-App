@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
 
         // Botão de configurações e adicionar botão
         Button settingsButton = findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(v -> openSettings());
+        settingsButton.setOnClickListener(this::openSettings);
         Button btnAdicionar = findViewById(R.id.btnAdd);
         Button btnSelection = findViewById(R.id.btnSelection);
         btnSelection.setOnClickListener(v -> {
@@ -76,23 +76,24 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
             executarAcao(acao, "Mensagem do botão dinâmico");
         });
 
-        novoBotao.setOnLongClickListener(v -> {
-            // Cria um AlertDialog perguntando se o usuário deseja excluir o botão
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Excluir botão")
-                    .setMessage("Deseja eliminar este botão?")
-                    .setPositiveButton("Sim", (dialog, which) -> {
-                        // Se o usuário clicar em "Sim", remova o botão do layout
-                        layoutBotoesDinamicos.removeView(novoBotao);
-                        // Atualize as preferências compartilhadas
-                        salvarBotoes();
-                    })
-                    .setNegativeButton("Não", null)
-                    .show();
-
-            // Retorna true para indicar que o evento de clique longo foi consumido
-            return true;
-        });
+        //novoBotao.setOnLongClickListener(v -> {
+        //    // Cria um AlertDialog perguntando se o usuário deseja excluir o botão
+        //    new AlertDialog.Builder(MainActivity.this)
+        //            .setTitle("Excluir botão")
+        //            .setMessage("Deseja eliminar este botão?")
+        //            .setPositiveButton("Sim", (dialog, which) -> {
+        //                // Se o usuário clicar em "Sim", remova o botão do layout
+        //                layoutBotoesDinamicos.removeView(novoBotao);
+        //                // Atualize as preferências compartilhadas
+        //                salvarBotoes();
+        //            })
+        //            .setNegativeButton("Não", null)
+        //            .show();
+        //
+        //    // Retorna true para indicar que o evento de clique longo foi consumido
+        //    return true;
+        //});
+        //
 
         // Set layout properties for the new button
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements AdicionarBotaoLis
         mostrarBotoesSelecionados();
     }
 
-    private void openSettings() {
+    private void openSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }

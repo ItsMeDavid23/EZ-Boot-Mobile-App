@@ -1,42 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="16dp"
     android:orientation="vertical"
-    android:padding="16dp">
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editTextUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
-        android:inputType="text" />
+        android:inputType="text"
+        style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox" />
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:hint="Password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextPassword"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox" />
 
         <ImageButton
             android:id="@+id/buttonTogglePassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_view"
+            android:src="@drawable/ic_visibility"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Toggle Password Visibility" />
-    </LinearLayout>
+            android:contentDescription="@string/toggle_password_visibility" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkBoxSignedIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manter-se conectado" />
-</LinearLayout>
+        android:text="Manter-se conectado"
+        style="@style/Widget.MaterialComponents.CompoundButton.CheckBox" />
+</com.google.android.material.textfield.TextInputLayout>

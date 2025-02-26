@@ -3,6 +3,7 @@ package com.example.controler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -11,9 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
 public class BotaoAdapter extends RecyclerView.Adapter<BotaoAdapter.BotaoViewHolder> {
-    private List<Botao> botoes;
     private SelecionarBotoesActivity activity;
+    private List<Botao> botoes;
 
     public BotaoAdapter(List<Botao> botoes, SelecionarBotoesActivity activity) {
         this.botoes = botoes;
@@ -23,16 +25,19 @@ public class BotaoAdapter extends RecyclerView.Adapter<BotaoAdapter.BotaoViewHol
     static class BotaoViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         CheckBox checkBox;
+        Button btnDelete;
 
         BotaoViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.textView);
             checkBox = itemView.findViewById(R.id.checkBox);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
 
         void bind(Botao botao) {
             textView.setText(botao.getTexto());
             checkBox.setChecked(botao.isSelected());
+            btnDelete.setVisibility(botao.getTipo() ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -63,10 +68,22 @@ public class BotaoAdapter extends RecyclerView.Adapter<BotaoAdapter.BotaoViewHol
                 holder.checkBox.setChecked(!holder.checkBox.isChecked());
             }
         });
+
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.onBotaoDeleted(botao);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return botoes.size();
+    }
+
+    public void updateBotoes(List<Botao> botoes) {
+        this.botoes = botoes;
+        notifyDataSetChanged();
     }
 }

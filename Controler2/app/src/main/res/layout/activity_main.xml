@@ -6,75 +6,81 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Botões de opções no meio da tela -->
     <LinearLayout
         android:id="@+id/layoutBotoes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#00FF00"
+        android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/settingsButton">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <Button
+            android:id="@+id/btnOption1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opção 1"
+            style="@style/CentralButtonStyle" />
+
+        <Button
+            android:id="@+id/btnOption2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opção 2"
+            style="@style/CentralButtonStyle" />
+
+        <Button
+            android:id="@+id/btnOption3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opção 3"
+            style="@style/CentralButtonStyle" />
     </LinearLayout>
 
-
-    <!-- Define guidelines para alinhar os botões verticalmente -->
-    <Button
-        android:id="@+id/btnSelection"
-        android:layout_width="wrap_content"
+    <!-- Footer com botões de navegação -->
+    <!-- Footer com botões de navegação -->
+    <LinearLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
-        android:onClick="openSelection"
-        android:text="Botões"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineVerticalBottomEnd" />
-    <Button
-        android:id="@+id/settingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="40dp"
-        android:onClick="openSettings"
-        android:text="Configurações"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineVerticalBottomEnd" />
-    <!-- Botão Adicionar -->
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="40dp"
-        android:onClick="adicionarBotao"
-        android:text="+"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineVerticalBottomEnd" />
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVerticalTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.17" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVerticalMiddle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.39" />
+        <Button
+            android:id="@+id/btnSelection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:onClick="openSelection"
+            android:text="Botões"
+            style="@style/FooterButtonStyle" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVerticalBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.62" />
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:onClick="openSettings"
+            android:text="Config"
+            style="@style/FooterButtonStyle" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVerticalBottomEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.87" />
-
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:onClick="abrirPaginaAdicaoBotao"
+            android:text="+"
+            style="@style/FooterButtonStyle" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
