@@ -53,11 +53,19 @@ public class ProgressActivity extends AppCompatActivity {
         String serverIp = getIntent().getStringExtra("serverIp");
         String serverPort = getIntent().getStringExtra("serverPort");
         ordem = getIntent().getStringExtra("ordem");
+        tipo = getIntent().getBooleanExtra("tipo", false);
+        Log.e (TAG, "Ordem que chegou ao progressactivity: " + ordem);
 
         progressBar.setProgress(progressStatus);
 
-        // Perguntar ao usuário se será necessário efetuar login
-        perguntarSeNecessarioLogin(macAddress, serverIp, serverPort);
+        // Perguntar ao usuário se será necessário efetuar login apenas se tipo for verdadeiro
+        if (tipo) {
+            perguntarSeNecessarioLogin(macAddress, serverIp, serverPort);
+        } else {
+            ordem += ",0,0,0,0";
+            Log.e(TAG, "Ordem: " + ordem);
+            new WakeOnLanTask().execute(macAddress, ordem, serverIp, serverPort);
+        }
     }
 
     private void perguntarSeNecessarioLogin(String macAddress, String serverIp, String serverPort) {

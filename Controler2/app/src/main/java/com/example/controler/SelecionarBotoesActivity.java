@@ -44,9 +44,10 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
     }
 
     void onBotaoSelected(Botao botao) {
-        Log.d(TAG, "onBotaoSelected: Botão selecionado - " + botao.getTexto());
+        Log.d(TAG, "onBotaoSelected: Botão selecionado - " + botao.getTexto() + ", estado - " + botao.isSelected());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
         Set<String> selectedButtons = new HashSet<>(preferences.getStringSet("selected_buttons", new HashSet<>()));
 
         if (botao.isSelected()) {
@@ -55,7 +56,9 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
             selectedButtons.remove(botao.getTexto());
         }
 
-        preferences.edit().putStringSet("selected_buttons", selectedButtons).apply();
+        editor.putStringSet("selected_buttons", selectedButtons);
+        editor.putBoolean("botao_" + botao.getTexto() + "_selecionado", botao.isSelected());
+        editor.apply();
 
         Log.d(TAG, "onBotaoSelected: Botões selecionados atualizados - " + selectedButtons);
     }
@@ -68,6 +71,7 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
 
         // Remove the button from SharedPreferences
         editor.remove("botao_" + botao.getTexto());
+        editor.remove("botao_" + botao.getTexto() + "_selecionado");
         editor.apply();
 
         // Remove the button from the saved buttons set
@@ -98,18 +102,15 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
         Log.d(TAG, "getBotoes: Botões selecionados recuperados - " + selectedButtons);
 
         List<Botao> botoes = new ArrayList<>();
-        botoes.add(new Botao("None", selectedButtons.contains("None"), true));
-        botoes.add(new Botao("LOL", selectedButtons.contains("LOL"), true));
-        botoes.add(new Botao("Valorant", selectedButtons.contains("Valorant"), true));
-        botoes.add(new Botao("GTA5", selectedButtons.contains("GTA5"), true));
-
         Map<String, ?> allEntries = preferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             if (entry.getKey().startsWith("botao_") && entry.getValue() instanceof String) {
                 String texto = entry.getKey().substring(6);
                 String acao = (String) entry.getValue();
-                botoes.add(new Botao(texto, selectedButtons.contains(texto), false));
-                Log.d(TAG, "getBotoes: Botão criado pelo usuário adicionado - " + texto);
+                boolean selecionado = preferences.getBoolean("botao_" + texto + "_selecionado", false);
+                boolean tipo = preferences.getBoolean("botao_" + texto + "_tipo", false);
+                botoes.add(new Botao(texto, selecionado, tipo, acao));
+                Log.d(TAG, "getBotoes: Botão adicionado - " + texto + ", selecionado - " + selecionado);
             }
         }
 

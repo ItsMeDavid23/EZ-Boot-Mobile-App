@@ -6,10 +6,11 @@ public class Botao {
     private boolean tipo;
     private String acao;
 
-    public Botao(String texto, boolean selecionado, boolean tipo) {
+    public Botao(String texto, boolean selecionado, boolean tipo, String acao) {
         this.texto = texto;
         this.selecionado = selecionado;
         this.tipo = tipo;
+        this.acao = acao;
     }
 
     public String getTexto() {
@@ -30,9 +31,5 @@ public class Botao {
 
     public String getAcao() {
         return acao;
-    }
-
-    public void setAcao(String acao) {
-        this.acao = acao;
     }
 }

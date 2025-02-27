@@ -1,11 +1,13 @@
 package com.example.controler;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class BotaoAdapter extends RecyclerView.Adapter<BotaoAdapter.BotaoViewHolder> {
-    private SelecionarBotoesActivity activity;
     private List<Botao> botoes;
+    private SelecionarBotoesActivity activity;
 
     public BotaoAdapter(List<Botao> botoes, SelecionarBotoesActivity activity) {
         this.botoes = botoes;
@@ -53,27 +55,21 @@ public class BotaoAdapter extends RecyclerView.Adapter<BotaoAdapter.BotaoViewHol
         Botao botao = botoes.get(position);
         holder.bind(botao);
 
+        Log.d(TAG, "onBindViewHolder: Botão " + botao.getTexto() + " - tipo: " + botao.getTipo());
+
         holder.checkBox.setOnCheckedChangeListener(null); // remove previous listener
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                botao.setSelecionado(isChecked);
-                activity.onBotaoSelected(botao);
-            }
+        holder.checkBox.setChecked(botao.isSelected()); // ensure checkbox reflects the current state
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            botao.setSelecionado(isChecked);
+            activity.onBotaoSelected(botao);
+            Log.d(TAG, "onBindViewHolder: Botão " + botao.getTexto() + " selecionado - " + isChecked);
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.checkBox.setChecked(!holder.checkBox.isChecked());
-            }
-        });
+        holder.itemView.setOnClickListener(v -> holder.checkBox.setChecked(!holder.checkBox.isChecked()));
 
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.onBotaoDeleted(botao);
-            }
+        holder.btnDelete.setOnClickListener(v -> {
+            Log.d(TAG, "onBindViewHolder: Botão " + botao.getTexto() + " deletado");
+            activity.onBotaoDeleted(botao);
         });
     }
 
