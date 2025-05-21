@@ -2,28 +2,55 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/grey">
 
-    <EditText
-        android:id="@+id/editTextTexto"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/footer_layout_adicionar_botao"
+        android:padding="16dp"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Texto do Botão"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"/>
+
+            <EditText
+                android:id="@+id/editTextAcao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextTexto"
+                android:layout_marginTop="16dp"
+                android:hint="Ação do Botão"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"/>
+
+            <Button
+                android:id="@+id/btnAdicionar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextAcao"
+                android:layout_centerHorizontal="true"
+                android:text="Criar Botão"
+                android:layout_marginTop="16dp" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <!-- Incluindo o layout do rodapé -->
+    <include
+        android:id="@+id/footer_layout_adicionar_botao"
+        layout="@layout/footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Texto do Botão"/>
-
-    <EditText
-        android:id="@+id/editTextAcao"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextTexto"
-        android:layout_marginTop="16dp"
-        android:hint="Ação do Botão"/>
-
-    <Button
-        android:id="@+id/btnAdicionar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextAcao"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp" />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

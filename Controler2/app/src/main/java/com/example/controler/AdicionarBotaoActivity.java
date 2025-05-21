@@ -2,10 +2,12 @@ package com.example.controler;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AdicionarBotaoActivity extends AppCompatActivity {
     private EditText editTextTexto;
     private EditText editTextAcao;
-    private Button btnAdicionar;
+    private Button btnCriar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +26,9 @@ public class AdicionarBotaoActivity extends AppCompatActivity {
 
         editTextTexto = findViewById(R.id.editTextTexto);
         editTextAcao = findViewById(R.id.editTextAcao);
-        btnAdicionar = findViewById(R.id.btnAdicionar);
+        btnCriar = findViewById(R.id.btnAdicionar);
 
-        btnAdicionar.setOnClickListener(v -> {
+        btnCriar.setOnClickListener(v -> {
             String textoBotao = editTextTexto.getText().toString();
             String acaoBotao = editTextAcao.getText().toString();
 
@@ -45,5 +47,32 @@ public class AdicionarBotaoActivity extends AppCompatActivity {
         });
 
         Log.d(TAG, "onCreate: AdicionarBotaoActivity setup complete");
+
+
+        //------- Footer type shit , ignorar -------
+        Button btnFooterHome = findViewById(R.id.btnFooterHome);
+        Button btnFooterSelectButtons = findViewById(R.id.btnFooterSelectButtons);
+        Button btnFooterConfig = findViewById(R.id.btnFooterConfig);
+        btnFooterHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdicionarBotaoActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnFooterSelectButtons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdicionarBotaoActivity.this, SelecionarBotoesActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnFooterConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdicionarBotaoActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

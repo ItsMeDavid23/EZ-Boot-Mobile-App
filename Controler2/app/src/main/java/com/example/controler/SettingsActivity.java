@@ -1,12 +1,14 @@
 // SettingsActivity.java
 package com.example.controler;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -117,13 +119,35 @@ public class SettingsActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(v -> saveProfile());
 
-        // Botão para voltar à atividade principal
-        Button backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> finish());
-
         // Carregar as configurações salvas
         loadSavedProfiles();
         loadActiveProfile();
+
+        //------- Footer type shit , ignorar -------
+        Button btnFooterHome = findViewById(R.id.btnFooterHome);
+        Button btnFooterAdd = findViewById(R.id.btnFooterAdd);
+        Button btnFooterSelectButtons = findViewById(R.id.btnFooterSelectButtons);
+        btnFooterHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnFooterAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, AdicionarBotaoActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnFooterSelectButtons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, SelecionarBotoesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void saveProfile() {

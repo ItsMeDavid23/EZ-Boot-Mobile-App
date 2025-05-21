@@ -1,10 +1,13 @@
 package com.example.controler;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,13 +37,35 @@ public class SelecionarBotoesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(botaoAdapter);
 
-        Button btnVoltar = findViewById(R.id.btnVoltar);
-        btnVoltar.setOnClickListener(v -> {
-            Log.d(TAG, "onClick: btnVoltar clicked");
-            finish();
-        });
-
         Log.d(TAG, "onCreate: SelecionarBotoesActivity setup complete");
+
+
+
+        //------- Footer type shit , ignorar -------
+        Button btnFooterHome = findViewById(R.id.btnFooterHome);
+        Button btnFooterAdd = findViewById(R.id.btnFooterAdd);
+        Button btnFooterConfig = findViewById(R.id.btnFooterConfig);
+        btnFooterHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelecionarBotoesActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnFooterAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelecionarBotoesActivity.this, AdicionarBotaoActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnFooterConfig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelecionarBotoesActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     void onBotaoSelected(Botao botao) {

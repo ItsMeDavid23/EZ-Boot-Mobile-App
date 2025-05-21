@@ -36,6 +36,7 @@ android {
 val kotlinVersion = "1.8.22"
 
 dependencies {
+    implementation("com.google.android.gms:play-services-ads:24.0.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation ("com.google.android.material:material:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

@@ -1,5 +1,11 @@
 package com.example.controler;
 
+import static android.content.ContentValues.TAG;
+
+import android.os.Build;
+import android.util.DisplayMetrics;
+import android.view.ViewGroup;
+import android.view.WindowMetrics;
 import android.widget.ImageButton;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,15 +14,23 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -30,23 +44,37 @@ import java.net.Socket;
 public class ProgressActivity extends AppCompatActivity {
     private TextView statusTextView;
     private ProgressBar progressBar;
-
-    private static final String TAG = "ControlerApp";
     private int progressStatus = 0;
-
     private String ordem;
-
     private boolean tipo;
-
     private Handler handler = new Handler();
+    private AdView adView;
+    private ViewGroup adContainerView;
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741"; // Substitui pelo teu ID real
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set the content view before finding views
         setContentView(R.layout.activity_progress);
+
+        // Initialize Mobile Ads SDK
+        MobileAds.initialize(this, initializationStatus -> Log.d(TAG, "SDK de anúncios inicializado."));
+
+        adContainerView = findViewById(R.id.adContainerView);
+        adView = new AdView(this);
+        adView.setAdUnitId(AD_UNIT_ID);
+        adView.setAdSize(getAdSize());
+        adContainerView.removeAllViews();
+        adContainerView.addView(adView);
 
         statusTextView = findViewById(R.id.statusTextView);
         progressBar = findViewById(R.id.progressBar);
+
+        // Load the ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         // Recupere os extras do Intent
         String macAddress = getIntent().getStringExtra("macAddress");
@@ -54,7 +82,7 @@ public class ProgressActivity extends AppCompatActivity {
         String serverPort = getIntent().getStringExtra("serverPort");
         ordem = getIntent().getStringExtra("ordem");
         tipo = getIntent().getBooleanExtra("tipo", false);
-        Log.e (TAG, "Ordem que chegou ao progressactivity: " + ordem);
+        Log.e(TAG, "Ordem que chegou ao progressactivity: " + ordem);
 
         progressBar.setProgress(progressStatus);
 
@@ -66,6 +94,28 @@ public class ProgressActivity extends AppCompatActivity {
             Log.e(TAG, "Ordem: " + ordem);
             new WakeOnLanTask().execute(macAddress, ordem, serverIp, serverPort);
         }
+
+        // Apply window insets to the root view
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    // Get the ad size with screen width.
+    public AdSize getAdSize() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int adWidthPixels = displayMetrics.widthPixels;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics windowMetrics = this.getWindowManager().getCurrentWindowMetrics();
+            adWidthPixels = windowMetrics.getBounds().width();
+        }
+
+        float density = displayMetrics.density;
+        int adWidth = (int) (adWidthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
 
     private void perguntarSeNecessarioLogin(String macAddress, String serverIp, String serverPort) {
@@ -89,18 +139,7 @@ public class ProgressActivity extends AppCompatActivity {
         EditText editTextUsername = loginView.findViewById(R.id.editTextUsername);
         EditText editTextPassword = loginView.findViewById(R.id.editTextPassword);
         CheckBox checkBoxSignedIn = loginView.findViewById(R.id.checkBoxSignedIn);
-        ImageButton buttonTogglePassword = loginView.findViewById(R.id.buttonTogglePassword);
 
-        // Adicionar lógica para alternar a visibilidade da senha
-        buttonTogglePassword.setOnClickListener(v -> {
-            if (editTextPassword.getInputType() == (android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
-                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            } else {
-                editTextPassword.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            }
-            // Move o cursor para o final do texto
-            editTextPassword.setSelection(editTextPassword.getText().length());
-        });
 
         new AlertDialog.Builder(this)
                 .setTitle("Efetuar Login")

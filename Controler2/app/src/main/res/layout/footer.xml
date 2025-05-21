@@ -1,0 +1,49 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/pretocinza"
+    android:padding="8dp">
+
+    <Button
+          android:id="@+id/btnFooterHome"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="🏠"
+          android:backgroundTint="@color/pretocinza"
+          android:textSize="21sp"/>
+
+    <Button
+        android:id="@+id/btnFooterSelectButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="☰"
+        android:backgroundTint="@color/pretocinza"
+        android:textSize="21sp"
+
+        /> <!-- Unicode para menu "hamburger" ou lista -->
+
+    <Button
+        android:id="@+id/btnFooterAdd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="➕"
+        android:backgroundTint="@color/pretocinza"
+        android:textSize="21sp"/> <!-- Unicode para mais -->
+
+    <Button
+        android:id="@+id/btnFooterConfig"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="⚙️"
+        android:backgroundTint="@color/pretocinza"
+        android:textSize="21sp"/> <!-- Unicode para engrenagem -->
+
+
+
+</LinearLayout>

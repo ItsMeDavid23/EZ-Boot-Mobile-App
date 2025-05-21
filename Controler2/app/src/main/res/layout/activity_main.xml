@@ -1,86 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/grey"
     tools:context=".MainActivity">
 
-    <!-- Botões de opções no meio da tela -->
-    <LinearLayout
-        android:id="@+id/layoutBotoes"
+    <!-- Container para o nome do perfil e o ícone do olho -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="4dp">
 
-        <Button
-            android:id="@+id/btnOption1"
+        <!-- TextView para exibir o nome do perfil ativo -->
+        <!-- Este TextView pode precisar de ajustes para não sobrepor o olho se o texto for muito longo -->
+        <!-- Uma opção é dar a ele um layout_toStartOf="@+id/imageViewToggleVisibility" -->
+        <!-- e ajustar o gravity ou usar um LinearLayout horizontal interno se a centralização exata for crítica -->
+        <TextView
+            android:id="@+id/textViewActiveProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Opção 1"
-            style="@style/CentralButtonStyle" />
+            android:layout_centerInParent="true"
+            android:text="Carregando perfil..."
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
 
-        <Button
-            android:id="@+id/btnOption2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opção 2"
-            style="@style/CentralButtonStyle" />
+        <ImageView
+            android:id="@+id/imageViewToggleVisibility"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_visibility"
+        android:contentDescription="Mostrar/Esconder Detalhes"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="4dp"
+        android:visibility="gone"/>
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/btnOption3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opção 3"
-            style="@style/CentralButtonStyle" />
-    </LinearLayout>
-
-    <!-- Footer com botões de navegação -->
-    <!-- Footer com botões de navegação -->
+    <!-- LinearLayout para IP, MAC e Porta -->
     <LinearLayout
-        android:id="@+id/footerLayout"
+        android:id="@+id/layoutProfileDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:gravity="center_horizontal"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
 
-        <Button
-            android:id="@+id/btnSelection"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textViewProfileMac"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            android:onClick="openSelection"
-            android:text="Botões"
-            style="@style/FooterButtonStyle" />
+            android:text="MAC: N/A"
+            android:textColor="@color/white"
+        android:textSize="12sp"
+        android:layout_marginEnd="8dp"/>
 
-        <Button
-            android:id="@+id/settingsButton"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textViewProfileIp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            android:onClick="openSettings"
-            android:text="Config"
-            style="@style/FooterButtonStyle" />
+            android:text="IP: N/A"
+            android:textColor="@color/white"
+        android:textSize="12sp"
+        android:layout_marginEnd="8dp"/>
 
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textViewProfilePort"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="8dp"
-            android:onClick="abrirPaginaAdicaoBotao"
-            android:text="+"
-            style="@style/FooterButtonStyle" />
+            android:text="Porta: N/A"
+            android:textColor="@color/white"
+        android:textSize="12sp"/>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- TextView para a mensagem de configuração -->
+    <TextView
+        android:id="@+id/textViewConfigureDeviceMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Por favor, vá para as configurações para configurar um dispositivo."
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:paddingBottom="16dp"
+        android:visibility="gone"/>
+
+    <!-- Seu LinearLayout para botões dinâmicos -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/layoutBotoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center_horizontal"/>
+    </ScrollView>
+
+    <!-- Incluindo o layout do rodapé -->
+    <include
+        layout="@layout/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
